@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Amor Amor — Gira y Gana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#0a0004;
+    --bg-2:#1c0210;
+    --gold:#ff1450;
+    --gold-light:#ff6b8f;
+    --wine:#b3001b;
+    --wine-dark:#2b0008;
+    --cream:#fff2f5;
+    --text-muted:#ff9db3;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255,20,80,.1), transparent 40%),
+      radial-gradient(circle at 50% 0%, var(--bg-2), var(--bg-1) 70%);
+    font-family:'Segoe UI', Georgia, 'Times New Roman', serif;
+    color:var(--cream);
+    overflow-x:hidden;
+  }
+  .card{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:440px;
+    background:linear-gradient(165deg, rgba(45,15,28,.6), rgba(26,10,18,.85));
+    border:1px solid rgba(255,20,80,.4);
+    border-radius:26px;
+    padding:36px 22px 30px;
+    box-shadow:
+      0 0 0 1px rgba(255,20,80,.15),
+      0 0 40px rgba(255,20,80,.25),
+      0 30px 70px rgba(0,0,0,.6),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border:1px solid rgba(255,20,80,.25);
+    border-radius:19px;
+    pointer-events:none;
+  }
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gold);
+    opacity:.7;
+    font-size:12px;
+    margin:2px 0 18px;
+  }
+  .divider::before, .divider::after{
+    content:"";
+    width:38px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold));
+  }
+  .divider::after{
+    background:linear-gradient(90deg, var(--gold), transparent);
+  }
+  .wrap{
+    position:relative;
+    z-index:1;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:28px 16px 60px;
+  }
+  .hearts-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .heart-particle{
+    position:absolute;
+    bottom:-40px;
+    color:var(--wine);
+    opacity:0;
+    font-size:18px;
+    animation:floatHeart 9s linear infinite;
+  }
+  @keyframes floatHeart{
+    0%{ transform:translateY(0) scale(.8); opacity:0; }
+    10%{ opacity:.35; }
+    85%{ opacity:.25; }
+    100%{ transform:translateY(-110vh) scale(1.1); opacity:0; }
+  }
+  header{
+    text-align:center;
+    margin-bottom:6px;
+    position:relative;
+    z-index:2;
+  }
+  .brand{
+    font-size:12px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:var(--gold-light);
+    opacity:.8;
+    margin-bottom:2px;
+  }
+  .logo{
+    font-family:'Dancing Script', cursive;
+    font-weight:700;
+    font-size:clamp(48px,13vw,72px);
+    line-height:1.1;
+    margin:0;
+    background:linear-gradient(180deg, #fff 5%, var(--gold-light) 40%, var(--gold) 75%, #a3003d 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:
+      drop-shadow(0 0 4px rgba(255,255,255,.7))
+      drop-shadow(0 0 16px var(--gold))
+      drop-shadow(0 0 34px var(--gold))
+      drop-shadow(0 3px 10px rgba(0,0,0,.6));
+  }
+  .logo .heart{
+    display:inline-block;
+    font-family:initial;
+    -webkit-text-fill-color:var(--wine);
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
+    font-size:.55em;
+    vertical-align:middle;
+  }
+  h1{
+    font-family:'Playfair Display', Georgia, serif;
+    font-style:italic;
+    font-size:clamp(15px,4vw,19px);
+    font-weight:600;
+    margin:14px 0 8px;
+    color:var(--cream);
+    letter-spacing:3px;
+    text-transform:uppercase;
+    text-shadow:0 0 10px rgba(255,20,80,.6);
+  }
+  h1::before, h1::after{
+    content:"✦";
+    color:var(--gold);
+    font-size:11px;
+    vertical-align:middle;
+    margin:0 10px;
+  }
+  .subtitle{
+    color:var(--text-muted);
+    font-size:14.5px;
+    max-width:380px;
+    margin:0 auto 30px;
+    line-height:1.55;
+  }
+
+  .wheel-stage{
+    position:relative;
+    width:min(88vw,360px);
+    height:min(88vw,360px);
+    margin:10px auto 26px;
+  }
+  .pointer{
+    position:absolute;
+    top:-14px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:16px solid transparent;
+    border-right:16px solid transparent;
+    border-top:28px solid var(--gold);
+    filter:drop-shadow(0 0 8px var(--gold)) drop-shadow(0 3px 4px rgba(0,0,0,.5));
+    z-index:5;
+  }
+  .wheel-ring{
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, var(--gold), var(--gold-light), var(--wine), var(--gold-light), var(--gold));
+    box-shadow:0 0 0 4px var(--wine-dark), 0 10px 40px rgba(0,0,0,.6);
+    animation:ringSpin 16s linear infinite;
+  }
+  @keyframes ringSpin{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
+  .lights{
+    position:absolute;
+    inset:-16px;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:6;
+  }
+  .light-bulb{
+    position:absolute;
+    top:50%; left:50%;
+    width:7px; height:7px;
+    margin:-3.5px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff, var(--gold-light) 55%, var(--gold) 100%);
+    box-shadow:0 0 10px 3px rgba(255,20,80,.8);
+    animation:bulbGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes bulbGlow{
+    0%,100%{ opacity:.55; transform:rotate(var(--a,0deg)) translateY(var(--r,-180px)) scale(.85); }
+    50%{ opacity:1; transform:rotate(var(--a,0deg)) translateY(var(--r,-180px)) scale(1.15); }
+  }
+  .wheel-glow{
+    position:absolute;
+    inset:-26px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,20,80,.45), transparent 70%);
+    animation:pulseGlow 2.6s ease-in-out infinite;
+    z-index:-1;
+  }
+  @keyframes pulseGlow{
+    0%,100%{ opacity:.5; transform:scale(1); }
+    50%{ opacity:.9; transform:scale(1.06); }
+  }
+  canvas#wheel{
+    position:relative;
+    display:block;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    transition:transform 5.5s cubic-bezier(.12,.72,.13,1.01);
+    box-shadow:inset 0 0 0 2px rgba(0,0,0,.2);
+  }
+  .wheel-sheen{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 24%, rgba(255,255,255,.22), transparent 45%);
+    pointer-events:none;
+    z-index:3;
+  }
+  .hub{
+    position:absolute;
+    top:50%;left:50%;
+    width:56px;height:56px;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, #a97a1f 100%);
+    border-radius:50%;
+    border:3px solid var(--wine-dark);
+    box-shadow:0 0 14px 2px rgba(255,20,80,.7), 0 3px 10px rgba(0,0,0,.5);
+    z-index:4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--wine-dark);
+    font-size:22px;
+    line-height:1;
+  }
+
+  button#spinBtn{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(180deg, #ffd6e0, var(--gold-light) 35%, var(--gold) 70%, #a3003d);
+    color:#fff;
+    border:none;
+    padding:15px 44px;
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    border-radius:40px;
+    cursor:pointer;
+    box-shadow:0 0 22px rgba(255,20,80,.7), 0 6px 18px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.5);
+    text-shadow:0 1px 3px rgba(0,0,0,.4);
+    transition:transform .15s ease, box-shadow .15s ease, opacity .2s ease;
+  }
+  button#spinBtn::after{
+    content:"";
+    position:absolute;
+    top:0; left:-75%;
+    width:50%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:skewX(-20deg);
+    animation:shimmer 3.2s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%{ left:-75%; }
+    45%,100%{ left:130%; }
+  }
+  button#spinBtn:hover{ transform:translateY(-2px); box-shadow:0 9px 22px rgba(0,0,0,.5);}
+  button#spinBtn:active{ transform:translateY(0); }
+  button#spinBtn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+  button#spinBtn:disabled::after{ display:none; }
+
+  .legend{
+    margin-top:30px;
+    width:100%;
+    max-width:420px;
+  }
+  .legend h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-style:italic;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    color:var(--gold-light);
+    text-align:center;
+    margin-bottom:12px;
+    opacity:.85;
+  }
+  .legend-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,20,80,.25);
+    padding:9px 11px;
+    border-radius:10px;
+    font-size:12.5px;
+    color:var(--cream);
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .legend-item:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,20,80,.6);
+    background:rgba(255,255,255,.07);
+  }
+  .dot{
+    width:26px;height:26px;
+    border-radius:50%;
+    flex:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);
+  }
+
+  /* Modal */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(10,3,7,.82);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    background:linear-gradient(160deg, var(--bg-2), var(--wine-dark));
+    border:1px solid var(--gold);
+    border-radius:18px;
+    padding:34px 28px;
+    text-align:center;
+    max-width:380px;
+    width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+    animation:pop .35s ease;
+  }
+  @keyframes pop{ from{ transform:scale(.8); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  .modal .emoji{ font-size:48px; margin-bottom:8px; }
+  .modal h2{ font-family:'Playfair Display', Georgia, serif; font-style:italic; color:var(--gold); margin:0 0 6px; font-size:23px; }
+  .modal p.prize{ font-size:19px; color:var(--cream); margin:0 0 18px; font-weight:600;}
+  .code-box{
+    background:rgba(0,0,0,.35);
+    border:1px dashed var(--gold);
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:18px;
+  }
+  .code-box .label{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;}
+  .code-box .code{ font-size:24px; letter-spacing:3px; font-weight:800; color:var(--gold-light); font-family:'Courier New',monospace; text-shadow:0 0 10px rgba(255,20,80,.7);}
+  .modal .instructions{ font-size:12.5px; color:var(--text-muted); line-height:1.5; margin-bottom:20px;}
+  .modal button{
+    background:var(--gold);
+    color:var(--wine-dark);
+    border:none;
+    padding:12px 30px;
+    border-radius:30px;
+    font-weight:700;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    font-size:13px;
+    cursor:pointer;
+  }
+  footer{
+    margin-top:36px;
+    font-size:11px;
+    color:var(--text-muted);
+    opacity:.65;
+    text-align:center;
+    line-height:1.8;
+  }
+  .locked-notice{
+    margin-top:18px;
+    max-width:360px;
+    text-align:center;
+    background:rgba(255,20,80,.1);
+    border:1px solid rgba(255,20,80,.4);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .locked-notice p{
+    margin:0 0 10px;
+    font-size:14px;
+    color:var(--cream);
+    line-height:1.5;
+  }
+  .locked-code-box{
+    font-size:13px;
+    color:var(--gold-light);
+    background:rgba(0,0,0,.3);
+    border-radius:8px;
+    padding:8px 10px;
+  }
+  .locked-code-box strong{
+    font-family:'Courier New',monospace;
+    letter-spacing:1px;
+  }
+  #confettiCanvas{
+    position:fixed; inset:0; pointer-events:none; z-index:60;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<div class="hearts-bg">
+  <span class="heart-particle" style="left:8%; animation-delay:0s; font-size:14px;">♥</span>
+  <span class="heart-particle" style="left:22%; animation-delay:2.2s; font-size:20px;">♥</span>
+  <span class="heart-particle" style="left:38%; animation-delay:4.1s; font-size:12px;">♥</span>
+  <span class="heart-particle" style="left:55%; animation-delay:1.3s; font-size:16px;">♥</span>
+  <span class="heart-particle" style="left:70%; animation-delay:5.5s; font-size:22px;">♥</span>
+  <span class="heart-particle" style="left:85%; animation-delay:3s; font-size:14px;">♥</span>
+  <span class="heart-particle" style="left:93%; animation-delay:6.4s; font-size:18px;">♥</span>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <header>
+      <div class="brand">Bienvenido a</div>
+      <p class="logo">Amor <span class="heart">♥</span> Amor</p>
+      <div class="divider">✦</div>
+      <h1>Gira y Gana</h1>
+      <p class="subtitle">Antes de irte, gira la ruleta y llévate una sorpresa para tu próxima visita.</p>
+    </header>
+
+    <div class="wheel-stage">
+      <div class="wheel-glow"></div>
+      <div class="pointer"></div>
+      <div class="wheel-ring"></div>
+      <div class="lights" id="lights"></div>
+      <canvas id="wheel" width="600" height="600"></canvas>
+      <div class="wheel-sheen"></div>
+      <div class="hub">♥</div>
+    </div>
+
+    <button id="spinBtn">Girar la ruleta</button>
+
+    <div id="lockedNotice" class="locked-notice" style="display:none;">
+      <p>✨ Ya usaste tu giro. ¡Vuelve en tu próxima visita para jugar de nuevo!</p>
+      <div class="locked-code-box">
+        <span class="lockedPrize"></span> · Código: <strong class="lockedCode"></strong>
+      </div>
+    </div>
+
+    <div class="legend">
+      <h3>Premios en juego</h3>
+      <div class="legend-grid" id="legendGrid"></div>
+    </div>
+  </div>
+
+  <footer>♥ Amor Amor ♥<br>Un giro por visita · Válido para tu próxima reserva · Sujeto a disponibilidad</footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="emoji" id="modalEmoji">🎉</div>
+    <h2>¡Felicidades!</h2>
+    <p class="prize" id="modalPrize">10% de descuento</p>
+    <div class="code-box">
+      <div class="label">Tu código de canje</div>
+      <div class="code" id="modalCode">MTL-0000</div>
+    </div>
+    <p class="instructions">Muestra este código en recepción al momento de tu próxima visita para hacerlo válido. Un solo uso por código.</p>
+    <button id="closeModal">Cerrar</button>
+  </div>
+</div>
+
+<script>
+// ---------------------------------------------------------
+// CONFIGURA AQUÍ LOS PREMIOS Y SUS PROBABILIDADES (weight)
+// La suma de "weight" no necesita ser 100, son pesos relativos.
+// ---------------------------------------------------------
+const PRIZES = [
+  { label: "10% OFF próxima visita", short: "10%",     color: "#b3001b", weight: 20, emoji: "🎉" },
+  { label: "Kit erótico de regalo",  short: "Kit",     color: "#ff1450", weight: 20, emoji: "💋" },
+  { label: "Trago de cortesía",      short: "Trago",   color: "#8a0022", weight: 15, emoji: "🍸" },
+  { label: "Champagne de regalo",    short: "Champ.",  color: "#ff3d68", weight: 15, emoji: "🍾" },
+  { label: "Upgrade de habitación",  short: "Upgrade", color: "#a3003d", weight: 12, emoji: "🔑" },
+  { label: "Bombones de regalo",     short: "Bombón",  color: "#ff1450", weight: 8,  emoji: "🍫" },
+  { label: "Desayuno de cortesía",   short: "Desay.",  color: "#b3001b", weight: 6,  emoji: "🍳" },
+  { label: "Cena de cortesía",       short: "Cena",    color: "#ff6b8f", weight: 4,  emoji: "🍽️" },
+];
+
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+const N = PRIZES.length;
+const arc = (2 * Math.PI) / N;
+const R = canvas.width / 2;
+
+// Colores alternados en alto contraste (rojo neón) para que la ruleta "pop" visualmente
+const WHEEL_TEXT = ['#fff2f5', '#2b0008'];
+
+function drawWheel(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<N;i++){
+    const start = i*arc - Math.PI/2;
+    const end = start + arc;
+    const textColor = WHEEL_TEXT[i % 2];
+
+    ctx.beginPath();
+    ctx.moveTo(R,R);
+    ctx.arc(R,R,R-6,start,end);
+    ctx.closePath();
+
+    // gradiente neón rojo/rosa con brillo para look de letrero de neón
+    const grad = ctx.createLinearGradient(
+      R + Math.cos(start)*R, R + Math.sin(start)*R,
+      R + Math.cos(end)*R, R + Math.sin(end)*R
+    );
+    if(i % 2 === 0){
+      grad.addColorStop(0, '#ff3d68');
+      grad.addColorStop(0.5, '#b3001b');
+      grad.addColorStop(1, '#3d000c');
+    } else {
+      grad.addColorStop(0, '#ff9db3');
+      grad.addColorStop(0.5, '#ff1450');
+      grad.addColorStop(1, '#a3003d');
+    }
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // brillo neón en el borde de cada segmento
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,20,80,.9)';
+    ctx.shadowBlur = 14;
+    ctx.strokeStyle = "rgba(255,255,255,0.75)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.restore();
+
+    // emoji grande
+    ctx.save();
+    ctx.translate(R,R);
+    ctx.rotate(start + arc/2);
+    ctx.textAlign = "right";
+    ctx.font = "38px sans-serif";
+    ctx.fillText(PRIZES[i].emoji, R-98, 14);
+    ctx.restore();
+
+    // etiqueta corta
+    ctx.save();
+    ctx.translate(R,R);
+    ctx.rotate(start + arc/2);
+    ctx.textAlign = "right";
+    ctx.fillStyle = textColor;
+    ctx.font = "700 21px Georgia, serif";
+    ctx.shadowColor = "rgba(0,0,0,.35)";
+    ctx.shadowBlur = 3;
+    ctx.fillText(PRIZES[i].short, R-26, 8);
+    ctx.restore();
+  }
+}
+drawWheel();
+
+// Luces tipo carnaval alrededor de la ruleta
+function layoutLights(){
+  const lights = document.getElementById('lights');
+  lights.innerHTML = '';
+  const stageRect = document.querySelector('.wheel-stage').getBoundingClientRect();
+  const radius = stageRect.width / 2 + 8;
+  const COUNT = 18;
+  for(let i=0;i<COUNT;i++){
+    const bulb = document.createElement('div');
+    bulb.className = 'light-bulb';
+    const angle = (360/COUNT) * i;
+    bulb.style.setProperty('--a', `${angle}deg`);
+    bulb.style.setProperty('--r', `-${radius}px`);
+    bulb.style.animationDelay = `${(i % 3) * 0.4}s`;
+    lights.appendChild(bulb);
+  }
+}
+layoutLights();
+window.addEventListener('resize', layoutLights);
+
+// Legend
+const legendGrid = document.getElementById('legendGrid');
+PRIZES.forEach(p=>{
+  const div = document.createElement('div');
+  div.className = 'legend-item';
+  div.innerHTML = `<span class="dot" style="background:${p.color}">${p.emoji}</span><span>${p.label}</span>`;
+  legendGrid.appendChild(div);
+});
+
+// Weighted random pick
+function pickPrizeIndex(){
+  const total = PRIZES.reduce((s,p)=>s+p.weight,0);
+  let r = Math.random()*total;
+  for(let i=0;i<N;i++){
+    if(r < PRIZES[i].weight) return i;
+    r -= PRIZES[i].weight;
+  }
+  return N-1;
+}
+
+function generateCode(){
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "MTL-";
+  for(let i=0;i<4;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+
+// ---------------------------------------------------------
+// CONTROL DE "UN SOLO INTENTO" POR DISPOSITIVO
+// Cambia COOLDOWN_HOURS si quieres que puedan volver a jugar
+// antes/después (24 = una vez al día desde el mismo celular).
+// Esto es un bloqueo del lado del navegador: frena a alguien
+// que recarga la página varias veces, pero no es infalible
+// (se salta borrando datos del navegador o usando otro celular).
+// ---------------------------------------------------------
+const COOLDOWN_HOURS = 24;
+const STORAGE_KEY = 'ruletaMotelUltimoGiro';
+
+function getSavedSpin(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+// URL de tu Google Apps Script (registro automático en la hoja de cálculo)
+const SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyZO33jYVtBhag1mD7pII81RboJDyO3O00rmX0bITmECndlJjpQuLN6yDhfRuqynrBR8w/exec";
+
+function logSpinToSheet(prize, code){
+  if(!SHEET_WEBHOOK_URL) return;
+  try{
+    fetch(SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: new URLSearchParams({ premio: prize.label, codigo: code })
+    }).catch(()=>{});
+  }catch(e){}
+}
+
+function saveSpin(prize, code){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    timestamp: Date.now(), prizeLabel: prize.label, emoji: prize.emoji, code: code
+  }));
+  logSpinToSheet(prize, code);
+}
+function hoursSince(ts){ return (Date.now() - ts) / 3600000; }
+
+const lockedNotice = document.getElementById('lockedNotice');
+function applyLockedState(saved){
+  spinBtn.disabled = true;
+  spinBtn.textContent = "Ya usaste tu giro";
+  lockedNotice.style.display = 'block';
+  lockedNotice.querySelector('.lockedPrize').textContent = `${saved.emoji} ${saved.prizeLabel}`;
+  lockedNotice.querySelector('.lockedCode').textContent = saved.code;
+}
+
+let spinning = false;
+let currentRotation = 0;
+const spinBtn = document.getElementById('spinBtn');
+const overlay = document.getElementById('overlay');
+
+// Al cargar la página, revisa si este dispositivo ya jugó recientemente
+const existingSpin = getSavedSpin();
+if(existingSpin && hoursSince(existingSpin.timestamp) < COOLDOWN_HOURS){
+  applyLockedState(existingSpin);
+}
+
+spinBtn.addEventListener('click', () => {
+  if(spinning || spinBtn.disabled) return;
+  spinning = true;
+  spinBtn.disabled = true;
+
+  const idx = pickPrizeIndex();
+  // Angle so that the pointer (at top, -90deg / 270deg equivalent) lands in the middle of segment idx
+  const segMiddle = idx*arc + arc/2;
+  // We want segMiddle to end up at the top (pointer). Wheel's 0 rad is drawn at -90deg (top) already offset in draw.
+  // Target rotation such that segment idx center aligns with pointer (top).
+  const fullSpins = 6; // extra spins for effect
+  const targetAngle = (2*Math.PI*fullSpins) - segMiddle;
+  currentRotation += targetAngle - (currentRotation % (2*Math.PI));
+  // simpler: just add spins + offset
+  const finalRotation = currentRotation;
+
+  canvas.style.transform = `rotate(${finalRotation}rad)`;
+
+  setTimeout(()=>{
+    const prize = PRIZES[idx];
+    const code = generateCode();
+    document.getElementById('modalEmoji').textContent = prize.emoji;
+    document.getElementById('modalPrize').textContent = prize.label;
+    document.getElementById('modalCode').textContent = code;
+    overlay.classList.add('show');
+    launchConfetti();
+    spinning = false;
+    saveSpin(prize, code);
+    applyLockedState({ emoji: prize.emoji, prizeLabel: prize.label, code: code });
+  }, 5600);
+});
+
+document.getElementById('closeModal').addEventListener('click', ()=>{
+  overlay.classList.remove('show');
+});
+
+// ---- lightweight confetti ----
+const confettiCanvas = document.getElementById('confettiCanvas');
+const cctx = confettiCanvas.getContext('2d');
+function resizeConfetti(){
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+resizeConfetti();
+window.addEventListener('resize', resizeConfetti);
+
+let particles = [];
+function launchConfetti(){
+  particles = [];
+  const colors = ['#ff1450','#ff6b8f','#b3001b','#fff2f5','#ff3d68'];
+  for(let i=0;i<120;i++){
+    particles.push({
+      x: confettiCanvas.width/2,
+      y: confettiCanvas.height*0.35,
+      vx: (Math.random()-0.5)*12,
+      vy: Math.random()*-10-4,
+      size: Math.random()*7+4,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*360,
+      vr: (Math.random()-0.5)*15,
+      life: 100
+    });
+  }
+  requestAnimationFrame(animateConfetti);
+}
+function animateConfetti(){
+  cctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+  let alive = false;
+  particles.forEach(p=>{
+    if(p.life<=0) return;
+    alive = true;
+    p.vy += 0.35;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vr;
+    p.life -= 1.4;
+    cctx.save();
+    cctx.translate(p.x,p.y);
+    cctx.rotate(p.rot*Math.PI/180);
+    cctx.fillStyle = p.color;
+    cctx.globalAlpha = Math.max(p.life/100,0);
+    cctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+    cctx.restore();
+  });
+  if(alive) requestAnimationFrame(animateConfetti);
+  else cctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+}
+</script>
+</body>
+</html>
